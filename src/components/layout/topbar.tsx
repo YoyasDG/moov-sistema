@@ -1,6 +1,7 @@
 import { ThemeToggle } from "@/components/theme-toggle";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import Image from "next/image";
 import type { Role } from "@prisma/client";
 
 export function Topbar({
@@ -16,11 +17,14 @@ export function Topbar({
 }) {
   return (
     <div className="flex items-center justify-between gap-4">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-4">
         <MobileNav role={role} />
-        <div>
-          <p className="font-subtitle text-lg text-primary">{roleLabel}</p>
-          <h2 className="font-heading text-[2.2rem] leading-none tracking-tight">{title}</h2>
+        <div className="flex items-center gap-3">
+          <Image src="/moov.svg" alt="Moov Aerial Studio" width={120} height={34} className="h-8 w-auto" />
+          <div className="hidden sm:block">
+            <p className="font-subtitle text-lg text-primary">{roleLabel}</p>
+            <h2 className="font-heading text-[2.2rem] leading-none tracking-tight">{title}</h2>
+          </div>
         </div>
       </div>
       <div className="surface-panel flex items-center gap-3 rounded-[1.5rem] px-3 py-2">

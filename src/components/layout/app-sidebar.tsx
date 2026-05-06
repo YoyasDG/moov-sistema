@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Role } from "@prisma/client";
 import { LogOut, Sparkles } from "lucide-react";
+import Image from "next/image";
 import { dashboardNavByRole } from "@/components/layout/nav-links";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -30,9 +31,12 @@ export function AppSidebar({
     >
       <div className="space-y-10">
         <div className="space-y-4">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/10 px-3 py-1.5 text-xs uppercase tracking-[0.28em] text-white/76">
-            <Sparkles className="h-3 w-3" />
-            Moov
+          <div className="inline-flex items-center gap-3">
+            <Image src="/moov.svg" alt="Moov Aerial Studio" width={110} height={30} priority className="h-7 w-auto" />
+            <div className="hidden rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.28em] text-muted-foreground lg:inline-flex">
+              <Sparkles className="h-3.5 w-3.5 inline-block mr-1" />
+              Aerial Studio
+            </div>
           </div>
           <div>
             <h2 className="font-heading text-[2.4rem] leading-[0.92]">Aerial Studio</h2>

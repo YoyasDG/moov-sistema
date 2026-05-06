@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Orbit, ShieldCheck, Sparkles, WalletCards } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -25,9 +26,12 @@ export default function MarketingPage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-8 md:px-10">
       <header className="flex items-center justify-between">
-        <div className="surface-panel inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-primary">
-          <Sparkles className="h-3.5 w-3.5" />
-          Moov Aerial Studio
+        <div className="flex items-center gap-4">
+          <Image src="/moov.svg" alt="Moov Aerial Studio" width={140} height={40} priority className="h-9 w-auto" />
+          <div className="hidden md:block">
+            <p className="font-subtitle text-sm text-primary">Sistema operativo del estudio</p>
+            <h1 className="font-heading text-2xl text-primary">Moov Aerial Studio</h1>
+          </div>
         </div>
         <Link href="/login">
           <Button variant="secondary">Acceder</Button>

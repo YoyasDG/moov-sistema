@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Role } from "@prisma/client";
 import { Menu } from "lucide-react";
+import Image from "next/image";
 import { dashboardNavByRole } from "@/components/layout/nav-links";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -22,7 +23,9 @@ export function MobileNav({ role }: { role: Role }) {
       </DialogTrigger>
       <DialogContent className="max-w-sm">
         <DialogHeader>
-          <DialogTitle>Menu</DialogTitle>
+          <div className="flex items-center justify-between">
+            <Image src="/moov.svg" alt="Moov Aerial Studio" width={120} height={36} className="h-8 w-auto" />
+          </div>
         </DialogHeader>
         <nav className="space-y-2">
           {dashboardNavByRole[role].map((item) => {
