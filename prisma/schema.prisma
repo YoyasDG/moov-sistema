@@ -1,0 +1,284 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  TEACHER
+  TUTOR
+}
+
+enum StudentStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+  PENDING_RENEWAL
+}
+
+enum PaymentConcept {
+  ENROLLMENT
+  MONTHLY
+  RE_ENROLLMENT
+}
+
+enum PaymentStatus {
+  PAID
+  PENDING
+  OVERDUE
+  UNDER_REVIEW
+}
+
+enum PaymentMethod {
+  CASH
+  BANK_TRANSFER_1
+  BANK_TRANSFER_2
+  CARD
+  UPLOAD_PROOF
+}
+
+enum AccountType {
+  CASH
+  BANK_1
+  BANK_2
+}
+
+enum ExpenseCategory {
+  RENT
+  MATERIAL
+  SERVICES
+  MARKETING
+  OTHER
+}
+
+enum LedgerEntryType {
+  PAYMENT
+  EXPENSE
+  ADJUSTMENT
+}
+
+enum NotificationType {
+  PAYMENT_REMINDER
+  ENROLLMENT_EXPIRING
+  ANNOUNCEMENT
+  SYSTEM
+}
+
+enum NotificationAudience {
+  ADMIN
+  TEACHER
+  TUTOR
+  ALL
+}
+
+enum NotificationStatus {
+  DRAFT
+  SENT
+  ARCHIVED
+}
+
+model User {
+  id                 String         @id @default(cuid())
+  email              String         @unique
+  passwordHash       String
+  fullName           String
+  phone              String?
+  role               Role
+  isActive           Boolean        @default(true)
+  groups             Group[]        @relation("TeacherGroups")
+  tutoredStudents    Student[]      @relation("TutorStudents")
+  verifiedPayments   Payment[]      @relation("PaymentVerifier")
+  createdExpenses    Expense[]      @relation("ExpenseCreator")
+  createdAlerts      Notification[] @relation("NotificationCreator")
+  auditLogs          AuditLog[]
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  deletedAt          DateTime?
+
+  @@index([role, isActive])
+}
+
+model Group {
+  id                   String       @id @default(cuid())
+  name                 String       @unique
+  schedule             String
+  monthlyFee           Decimal      @db.Decimal(10, 2)
+  discountedMonthlyFee Decimal?     @db.Decimal(10, 2)
+  capacity             Int
+  description          String?
+  teacherId            String?
+  teacher              User?        @relation("TeacherGroups", fields: [teacherId], references: [id])
+  students             Student[]
+  enrollments          Enrollment[]
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+  deletedAt            DateTime?
+
+  @@index([teacherId])
+}
+
+model Student {
+  id                String          @id @default(cuid())
+  fullName          String
+  birthDate         DateTime
+  tutorName         String
+  phone             String
+  email             String
+  allergies         String?
+  injuries          String?
+  notes             String?
+  avatarUrl         String?
+  status            StudentStatus   @default(ACTIVE)
+  groupId           String?
+  primaryTutorId    String?
+  group             Group?          @relation(fields: [groupId], references: [id])
+  primaryTutor      User?           @relation("TutorStudents", fields: [primaryTutorId], references: [id])
+  payments          Payment[]
+  enrollments       Enrollment[]
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  deletedAt         DateTime?
+
+  @@index([status, groupId])
+  @@index([primaryTutorId])
+  @@index([fullName])
+}
+
+model Enrollment {
+  id         String           @id @default(cuid())
+  studentId  String
+  groupId    String
+  startDate  DateTime
+  expiresAt  DateTime
+  status     EnrollmentStatus @default(ACTIVE)
+  student    Student          @relation(fields: [studentId], references: [id])
+  group      Group            @relation(fields: [groupId], references: [id])
+  payments   Payment[]
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  deletedAt  DateTime?
+
+  @@index([studentId, status])
+  @@index([expiresAt, status])
+}
+
+model Account {
+  id           String        @id @default(cuid())
+  type         AccountType   @unique
+  name         String        @unique
+  description  String?
+  payments     Payment[]
+  expenses     Expense[]
+  ledgerEntries LedgerEntry[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Payment {
+  id               String         @id @default(cuid())
+  studentId        String
+  enrollmentId     String?
+  accountId        String?
+  verifiedById     String?
+  concept          PaymentConcept
+  monthKey         String?
+  dueDate          DateTime
+  discountDeadline DateTime
+  baseAmount       Decimal        @db.Decimal(10, 2)
+  discountedAmount Decimal        @db.Decimal(10, 2)
+  amountPaid       Decimal?       @db.Decimal(10, 2)
+  paidAt           DateTime?
+  method           PaymentMethod?
+  receiptUrl       String?
+  status           PaymentStatus  @default(PENDING)
+  notes            String?
+  student          Student        @relation(fields: [studentId], references: [id])
+  enrollment       Enrollment?    @relation(fields: [enrollmentId], references: [id])
+  account          Account?       @relation(fields: [accountId], references: [id])
+  verifiedBy       User?          @relation("PaymentVerifier", fields: [verifiedById], references: [id])
+  ledgerEntry      LedgerEntry?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  deletedAt        DateTime?
+
+  @@unique([studentId, concept, monthKey])
+  @@index([status, dueDate])
+  @@index([studentId, concept])
+  @@index([accountId])
+}
+
+model Expense {
+  id          String          @id @default(cuid())
+  accountId   String
+  createdById String?
+  amount      Decimal         @db.Decimal(10, 2)
+  date        DateTime
+  category    ExpenseCategory
+  description String
+  invoiced    Boolean         @default(false)
+  account     Account         @relation(fields: [accountId], references: [id])
+  createdBy   User?           @relation("ExpenseCreator", fields: [createdById], references: [id])
+  ledgerEntry LedgerEntry?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  deletedAt   DateTime?
+
+  @@index([accountId, date])
+  @@index([category, date])
+}
+
+model LedgerEntry {
+  id          String          @id @default(cuid())
+  accountId   String
+  paymentId   String?         @unique
+  expenseId   String?         @unique
+  type        LedgerEntryType
+  amount      Decimal         @db.Decimal(10, 2)
+  date        DateTime        @default(now())
+  description String
+  account     Account         @relation(fields: [accountId], references: [id])
+  payment     Payment?        @relation(fields: [paymentId], references: [id])
+  expense     Expense?        @relation(fields: [expenseId], references: [id])
+  createdAt   DateTime        @default(now())
+
+  @@index([accountId, date])
+}
+
+model Notification {
+  id          String               @id @default(cuid())
+  createdById String?
+  title       String
+  message     String
+  type        NotificationType
+  audience    NotificationAudience
+  status      NotificationStatus   @default(DRAFT)
+  sendAt      DateTime?
+  createdBy   User?                @relation("NotificationCreator", fields: [createdById], references: [id])
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  deletedAt   DateTime?
+
+  @@index([audience, status])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId    String?
+  entity     String
+  entityId   String
+  action     String
+  metadata   Json?
+  actor      User?    @relation(fields: [actorId], references: [id])
+  createdAt  DateTime @default(now())
+
+  @@index([entity, entityId])
+  @@index([actorId, createdAt])
+}

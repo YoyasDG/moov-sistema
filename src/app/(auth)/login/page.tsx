@@ -1,0 +1,31 @@
+import { redirect } from "next/navigation";
+import { LoginForm } from "@/components/forms/login-form";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getCurrentSession } from "@/lib/auth/dal";
+
+export default async function LoginPage() {
+  const session = await getCurrentSession();
+
+  if (session) {
+    redirect(session.role === "TUTOR" ? "/portal" : "/dashboard");
+  }
+
+  return (
+    <main className="grid min-h-screen place-items-center px-6 py-12">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="font-heading text-4xl">Bienvenida</CardTitle>
+          <CardDescription>
+            Usa las credenciales del seed para entrar como admin, maestra o mama y tutor.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <LoginForm />
+          <div className="mt-6 rounded-[1.5rem] bg-muted p-4 text-sm text-muted-foreground">
+            Admin: <strong>admin@moovstudio.com</strong> · Contrasena: <strong>Moov2026!</strong>
+          </div>
+        </CardContent>
+      </Card>
+    </main>
+  );
+}

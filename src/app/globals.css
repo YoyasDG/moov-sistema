@@ -1,26 +1,184 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary: #673397; /* Primary purple - for headings, actions, accents */
+  --secondary: #bea1f1; /* Medium purple - subtitles, badges, hover accents */
+  --accent: #e5d9f9; /* Light purple - soft highlights, focus rings */
+  --muted: #fbf8fe; /* very light neutral with a whisper of warmth */
+  --background: #ffffff; /* MAIN background should be white */
+  --foreground: #13121a; /* high contrast text for readability */
+  --card: #ffffff; /* cards remain white and minimal */
+  --card-foreground: #13121a;
+  --muted-foreground: #6b6672; /* softer subtitle color */
+  --primary-foreground: #ffffff;
+  --secondary-foreground: #4d2b70;
+  --accent-foreground: #5c3a82;
+  --border: rgba(16, 16, 24, 0.06); /* very soft, neutral separators */
+  --ring: rgba(229, 217, 249, 0.36); /* soft purple focus ring */
+  --success: #2f855a;
+  --warning: #d69e2e;
+  --danger: #c53030;
+  --sidebar: linear-gradient(180deg, rgba(255,255,255,1), rgba(255,255,255,1)); /* keep sidebar light */
+  --sidebar-foreground: #13121a;
+  --shadow-soft: 0 8px 24px rgba(16, 16, 24, 0.06);
+  --shadow-card: 0 6px 18px rgba(16, 16, 24, 0.06);
+  --font-heading: "Contralto Small Demi Bold", "Cormorant Garamond", Georgia, serif;
+  --font-subtitle: "Contralto Small Regular Italic", "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Advent Pro Medium", "Advent Pro", "Manrope", "Segoe UI", sans-serif;
 }
 
 @theme inline {
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-muted: var(--muted);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --font-sans: var(--font-sans);
+  --font-heading: var(--font-heading);
+  --font-subtitle: var(--font-subtitle);
+}
+/* 
+.dark {
+  --primary: #bea1f1;
+  --secondary: #8f6bc4;
+  --accent: #3d245d;
+  --muted: #0f0713;
+  --background: #0b0820;
+  --foreground: #f5f0fd;
+  --card: rgba(18, 12, 28, 0.88);
+  --card-foreground: #f5f0fd;
+  --muted-foreground: #c7b6df;
+  --primary-foreground: #1d0e2f;
+  --secondary-foreground: #f9f5ff;
+  --accent-foreground: #efe5ff;
+  --border: rgba(229, 217, 249, 0.06);
+  --ring: rgba(190, 161, 241, 0.18);
+  --success: #bea1f1;
+  --warning: #d4bdf7;
+  --danger: #d1b3ff;
+  --sidebar: linear-gradient(180deg, rgba(18,12,28,0.96), rgba(12,8,20,0.96));
+  --sidebar-foreground: #f5f0fd;
+  --shadow-soft: 0 10px 28px rgba(0, 0, 0, 0.48);
+  --shadow-card: 0 8px 22px rgba(0,0,0,0.48);
+} */
+
+* {
+  border-color: var(--border);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--background);
+  font-family: var(--font-sans), sans-serif;
+  letter-spacing: 0.01em;
+  line-height: 1.6; /* increase breathing room */
+  background-image: none; /* keep main canvas white and clean */
 }
+
+::selection {
+  background: rgba(229, 217, 249, 0.36);
+}
+
+.glass {
+  background: var(--card);
+  backdrop-filter: blur(6px);
+  box-shadow: var(--shadow-card);
+}
+
+.grain {
+  position: relative;
+}
+
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.09) 0.7px, transparent 0.7px);
+  background-size: 16px 16px;
+  opacity: 0.14;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.font-heading {
+  font-family: var(--font-heading), serif;
+  letter-spacing: -0.02em;
+  color: var(--primary); /* headings use primary purple */
+}
+
+.font-subtitle {
+  font-family: var(--font-subtitle), serif;
+  font-style: italic;
+  letter-spacing: 0.01em;
+  color: var(--secondary);
+}
+
+.surface-panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+  border-radius: 12px;
+}
+
+.dark .surface-panel {
+  background: var(--card);
+}
+
+/* Enforce white-first backgrounds across utility classes */
+[class*="bg-"] {
+  background-color: var(--background) !important;
+  background-image: none !important;
+}
+
+/* Text color rules: headings use primary, body and remaining text use foreground */
+h1, h2, h3, h4, h5, h6, .font-heading {
+  color: var(--primary) !important;
+}
+
+body, p, span, a, li, input, textarea, button, .text-muted-foreground, .muted-foreground, .text-muted {
+  color: var(--foreground) !important;
+}
+
+/* Neutralize utilities that force white text to ensure text remains primary or foreground */
+.text-white, .text-primary-foreground {
+  color: var(--foreground) !important;
+}
+
+/* Soft overrides to reduce heavy purple surfaces across existing utility classes */
+.border-primary\/10,
+.border-primary\/12,
+.border-primary\/16 {
+  border-color: var(--border) !important;
+}
+
+.bg-accent,
+.bg-accent\/28,
+.bg-accent\/38,
+.bg-accent\/70,
+.bg-accent\/65 {
+  background-color: rgba(229, 217, 249, 0.12) !important;
+}
+
+/* Removed complex Tailwind-generated shadow selector overrides to avoid PostCSS parsing errors.
+   Shadows are adjusted via component-level changes and --shadow-* tokens above. */
