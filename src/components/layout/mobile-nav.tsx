@@ -23,7 +23,7 @@ export function MobileNav({ role }: { role: Role }) {
       </DialogTrigger>
       <DialogContent className="max-w-sm">
         <DialogHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-center py-2">
             <Image src="/moov.svg" alt="Moov Aerial Studio" width={120} height={36} className="h-8 w-auto" />
           </div>
         </DialogHeader>

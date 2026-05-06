@@ -26,12 +26,8 @@ export default function MarketingPage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-8 md:px-10">
       <header className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center">
           <Image src="/moov.svg" alt="Moov Aerial Studio" width={140} height={40} priority className="h-9 w-auto" />
-          <div className="hidden md:block">
-            <p className="font-subtitle text-sm text-primary">Sistema operativo del estudio</p>
-            <h1 className="font-heading text-2xl text-primary">Moov Aerial Studio</h1>
-          </div>
         </div>
         <Link href="/login">
           <Button variant="secondary">Acceder</Button>

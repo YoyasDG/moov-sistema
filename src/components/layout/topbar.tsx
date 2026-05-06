@@ -21,10 +21,7 @@ export function Topbar({
         <MobileNav role={role} />
         <div className="flex items-center gap-3">
           <Image src="/moov.svg" alt="Moov Aerial Studio" width={120} height={34} className="h-8 w-auto" />
-          <div className="hidden sm:block">
-            <p className="font-subtitle text-lg text-primary">{roleLabel}</p>
-            <h2 className="font-heading text-[2.2rem] leading-none tracking-tight">{title}</h2>
-          </div>
+          <h2 className="font-heading text-[1.6rem] leading-none tracking-tight hidden sm:block">{title}</h2>
         </div>
       </div>
       <div className="surface-panel flex items-center gap-3 rounded-[1.5rem] px-3 py-2">

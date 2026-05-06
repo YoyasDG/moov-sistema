@@ -15,12 +15,12 @@ export default async function LoginPage() {
     <main className="grid min-h-screen place-items-center px-6 py-12">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center justify-center py-4">
             <Image src="/moov.svg" alt="Moov Aerial Studio" width={140} height={40} className="h-10 w-auto" priority />
           </div>
-          <CardTitle className="font-heading text-4xl">Bienvenida</CardTitle>
-          <CardDescription>
-            Usa las credenciales del seed para entrar como admin, maestra o mama y tutor.
+          <CardTitle className="font-heading text-4xl text-center">Bienvenida</CardTitle>
+          <CardDescription className="text-center">
+            Usa las credenciales del seed para entrar como admin, maestra o tutor.
           </CardDescription>
         </CardHeader>
         <CardContent>
