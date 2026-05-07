@@ -11,7 +11,7 @@ const tutorUpdateSchema = z.object({
 });
 
 export async function GET(request: Request, context: RouteContext<"/api/tutors/[id]">) {
-  const { id } = context.params;
+  const { id } = await context.params;
   const tutor = await prisma.user.findUnique({ where: { id }, select: { id: true, fullName: true, email: true, phone: true, isActive: true } });
   if (!tutor) return jsonError("Tutor no encontrado.", 404);
   return jsonOk(tutor);
@@ -21,7 +21,7 @@ export async function PUT(request: Request, context: RouteContext<"/api/tutors/[
   const auth = await requireApiRole(["ADMIN", "TEACHER"]);
   if (auth.error) return auth.error;
 
-  const { id } = context.params;
+  const { id } = await context.params;
   const body = await request.json();
   const parsed = tutorUpdateSchema.safeParse(body);
   if (!parsed.success) return jsonError(parsed.error.issues[0]?.message ?? "Datos inválidos.");
@@ -45,7 +45,7 @@ export async function DELETE(request: Request, context: RouteContext<"/api/tutor
   const auth = await requireApiRole(["ADMIN", "TEACHER"]);
   if (auth.error) return auth.error;
 
-  const { id } = context.params;
+  const { id } = await context.params;
   await prisma.user.update({ where: { id }, data: { deletedAt: new Date() } });
   return jsonOk({}, 204);
 }
