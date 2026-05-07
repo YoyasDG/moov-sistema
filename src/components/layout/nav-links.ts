@@ -5,6 +5,7 @@ export const dashboardNavByRole: Record<Role, Array<{ href: string; label: strin
   ADMIN: [
     { href: "/dashboard", label: "Dashboard", icon: Gauge },
     { href: "/students", label: "Alumnas", icon: Users },
+    { href: "/tutors", label: "Tutores", icon: Users },
     { href: "/groups", label: "Grupos", icon: Layers3 },
     { href: "/payments", label: "Pagos", icon: CreditCard },
     { href: "/enrollments", label: "Inscripciones", icon: GraduationCap },
@@ -14,6 +15,7 @@ export const dashboardNavByRole: Record<Role, Array<{ href: string; label: strin
   TEACHER: [
     { href: "/dashboard", label: "Dashboard", icon: Gauge },
     { href: "/students", label: "Alumnas", icon: Users },
+    { href: "/tutors", label: "Tutores", icon: Users },
     { href: "/groups", label: "Grupos", icon: Layers3 },
     { href: "/payments", label: "Pagos", icon: CreditCard },
     { href: "/enrollments", label: "Inscripciones", icon: GraduationCap },
