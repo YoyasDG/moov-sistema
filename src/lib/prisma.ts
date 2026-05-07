@@ -1,5 +1,6 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
+import "./env"; // validate environment early and fail fast
 
 declare global {
   var prismaGlobal: PrismaClient | undefined;
