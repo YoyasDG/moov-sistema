@@ -99,6 +99,9 @@ model User {
   createdExpenses    Expense[]      @relation("ExpenseCreator")
   createdAlerts      Notification[] @relation("NotificationCreator")
   auditLogs          AuditLog[]
+  invitationsSent    Invitation[]   @relation("UserInvitations")
+  passwordResets     PasswordReset[]
+  sessions           Session[]
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
   deletedAt          DateTime?
@@ -281,4 +284,49 @@ model AuditLog {
 
   @@index([entity, entityId])
   @@index([actorId, createdAt])
+}
+
+model Invitation {
+  id           String   @id @default(cuid())
+  email        String
+  role         Role
+  tokenHash    String
+  expiresAt    DateTime
+  invitedById  String?
+  used         Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  invitedBy    User?    @relation("UserInvitations", fields: [invitedById], references: [id])
+
+  @@index([email])
+  @@index([expiresAt])
+}
+
+model PasswordReset {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([expiresAt])
 }
