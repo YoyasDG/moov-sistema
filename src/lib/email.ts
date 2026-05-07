@@ -8,8 +8,7 @@ async function sendEmail(to: string, subject: string, html: string) {
     console.warn("RESEND_API_KEY not configured — skipping email");
     return;
   }
-
-  await fetch("https://api.resend.com/email", {
+  const res = await fetch("https://api.resend.com/email", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -22,6 +21,23 @@ async function sendEmail(to: string, subject: string, html: string) {
       html,
     }),
   });
+
+  if (!res.ok) {
+    let body: any = null;
+    try {
+      body = await res.json();
+    } catch (e) {
+      try {
+        body = await res.text();
+      } catch (e2) {
+        body = String(e2);
+      }
+    }
+
+    // Log detailed info for server logs (Vercel) to diagnose 4xx/5xx errors
+    console.error("Resend API error", { status: res.status, statusText: res.statusText, body });
+    throw new Error(`Resend API error: ${res.status} ${res.statusText}`);
+  }
 }
 
 export async function sendInvitationEmail(to: string, subject: string, html: string) {

@@ -27,7 +27,12 @@ export async function POST(request: Request) {
 
   const link = `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/accept-invite?token=${encodeURIComponent(token)}&email=${encodeURIComponent(invite.email)}`;
   const html = invitationEmailHtml(link, expiresAt);
-  await sendInvitationEmail(invite.email, "Invitación a Moov (reenvío)", html);
+  try {
+    await sendInvitationEmail(invite.email, "Invitación a Moov (reenvío)", html);
+  } catch (err: any) {
+    console.error("Failed to resend invitation", err);
+    return jsonError(err?.message ?? "Failed to send invitation", 502);
+  }
 
   return jsonOk({ ok: true });
 }
