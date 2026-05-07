@@ -6,8 +6,12 @@ import { requireRole } from "@/lib/auth/dal";
 export default async function AdminUsersPage() {
   const session = await requireRole(["ADMIN"]);
 
-  const users = await prisma.user.findMany({ select: { id: true, email: true, fullName: true, role: true, isActive: true, createdAt: true } });
-  const invites = await prisma.invitation.findMany({ orderBy: { createdAt: "desc" } });
+  const usersRaw = await prisma.user.findMany({ select: { id: true, email: true, fullName: true, role: true, isActive: true, createdAt: true } });
+  const invitesRaw = await prisma.invitation.findMany({ orderBy: { createdAt: "desc" } });
+
+  // Serialize Dates to plain strings for Client Components
+  const users = usersRaw.map((u) => ({ ...u, createdAt: u.createdAt.toISOString() }));
+  const invites = invitesRaw.map((i) => ({ ...i, createdAt: i.createdAt.toISOString(), expiresAt: i.expiresAt.toISOString() }));
 
   return (
     <div className="space-y-6">
