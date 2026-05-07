@@ -18,10 +18,10 @@ export default async function DashboardPage() {
       />
 
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-        <StatsCard label="Mensualidades pendientes" value={String(dashboard.cards.pendingMonthly)} helper="Incluye pagos pendientes y vencidos" />
-        <StatsCard label="Inscripciones por vencer" value={String(dashboard.cards.expiringCount)} helper="Proximos 30 dias" />
-        <StatsCard label="Ingresos del mes" value={formatCurrency(dashboard.cards.income)} helper="Cobranza ya aplicada a cuentas" />
-        <StatsCard label="Alumnas activas" value={String(dashboard.cards.activeStudents)} helper="Base activa actual" />
+        <StatsCard href="/payments?status=pending" label="Mensualidades pendientes" value={String(dashboard.cards.pendingMonthly)} helper="Incluye pagos pendientes y vencidos" />
+        <StatsCard href="/enrollments?filter=expiring" label="Inscripciones por vencer" value={String(dashboard.cards.expiringCount)} helper="Proximos 30 dias" />
+        <StatsCard href="/payments" label="Ingresos del mes" value={formatCurrency(dashboard.cards.income)} helper="Cobranza ya aplicada a cuentas" />
+        <StatsCard href="/students?status=ACTIVE" label="Alumnas activas" value={String(dashboard.cards.activeStudents)} helper="Base activa actual" />
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[1.4fr_0.6fr]">

@@ -5,10 +5,17 @@ import { SectionHeader } from "@/components/section-header";
 import { Badge } from "@/components/ui/badge";
 import { PaymentActionDialog } from "@/components/payments/payment-action-dialog";
 
-export default async function PaymentsPage() {
+export default async function PaymentsPage({ searchParams }: { searchParams?: { status?: string } }) {
+  const status = searchParams?.status ?? undefined;
+  const whereBase: any = { deletedAt: null };
+
+  if (status === "pending") {
+    whereBase.status = { not: "PAID" };
+  }
+
   const [payments, accounts] = await Promise.all([
     prisma.payment.findMany({
-      where: { deletedAt: null },
+      where: whereBase,
       include: { student: true, account: true },
       orderBy: [{ status: "asc" }, { dueDate: "desc" }],
       take: 24,

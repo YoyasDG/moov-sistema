@@ -4,9 +4,18 @@ import { Badge } from "@/components/ui/badge";
 import { SectionHeader } from "@/components/section-header";
 import { formatDate } from "@/lib/format";
 
-export default async function EnrollmentsPage() {
+export default async function EnrollmentsPage({ searchParams }: { searchParams?: { filter?: string } }) {
+  const filter = searchParams?.filter;
+  const whereBase: any = { deletedAt: null };
+
+  if (filter === "expiring") {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() + 30);
+    whereBase.expiresAt = { lte: cutoff };
+  }
+
   const enrollments = await prisma.enrollment.findMany({
-    where: { deletedAt: null },
+    where: whereBase,
     include: { student: true, group: true },
     orderBy: { expiresAt: "asc" },
   });
