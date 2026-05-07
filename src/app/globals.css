@@ -51,7 +51,7 @@
   --font-heading: var(--font-heading);
   --font-subtitle: var(--font-subtitle);
 }
-/* 
+
 .dark {
   --primary: #bea1f1;
   --secondary: #8f6bc4;
@@ -74,7 +74,7 @@
   --sidebar-foreground: #f5f0fd;
   --shadow-soft: 0 10px 28px rgba(0, 0, 0, 0.48);
   --shadow-card: 0 8px 22px rgba(0,0,0,0.48);
-} */
+}
 
 * {
   border-color: var(--border);

@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { loginSchema } from "@/lib/validations";
 import { z } from "zod";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -60,6 +61,15 @@ export function LoginForm() {
       </div>
 
       {error ? <p className="text-sm text-danger">{error}</p> : null}
+
+      <div className="flex items-center justify-between">
+        <div className="text-sm">
+          <Link href="/forgot-password" className="text-primary hover:underline">
+            ¿Olvidaste tu contraseña?
+          </Link>
+        </div>
+        <div className="text-sm text-muted-foreground">¿Nuevo? <Link href="/accept-invite" className="text-primary hover:underline">Aceptar invitación</Link></div>
+      </div>
 
       <Button type="submit" className="w-full" disabled={isPending}>
         {isPending ? "Entrando..." : "Iniciar sesión"}

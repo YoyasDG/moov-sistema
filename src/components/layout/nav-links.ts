@@ -6,11 +6,13 @@ export const dashboardNavByRole: Record<Role, Array<{ href: string; label: strin
     { href: "/dashboard", label: "Dashboard", icon: Gauge },
     { href: "/students", label: "Alumnas", icon: Users },
     { href: "/tutors", label: "Tutores", icon: Users },
+    { href: "/admin/users", label: "Usuarios", icon: Users },
     { href: "/groups", label: "Grupos", icon: Layers3 },
     { href: "/payments", label: "Pagos", icon: CreditCard },
     { href: "/enrollments", label: "Inscripciones", icon: GraduationCap },
     { href: "/finance", label: "Finanzas", icon: PiggyBank },
     { href: "/notifications", label: "Avisos", icon: Bell },
+    { href: "/settings", label: "Ajustes", icon: Layers3 },
   ],
   TEACHER: [
     { href: "/dashboard", label: "Dashboard", icon: Gauge },
@@ -21,6 +23,7 @@ export const dashboardNavByRole: Record<Role, Array<{ href: string; label: strin
     { href: "/enrollments", label: "Inscripciones", icon: GraduationCap },
     { href: "/notifications", label: "Avisos", icon: Bell },
     { href: "/finance", label: "Finanzas", icon: PiggyBank },
+    { href: "/settings", label: "Ajustes", icon: Layers3 },
   ],
   TUTOR: [],
 };
